@@ -183,6 +183,7 @@ typedef enum {
     AUDIO_FORMAT_DTS_LBR             = 0x13000000UL,
     AUDIO_FORMAT_AMR_WB_PLUS         = 0x14000000UL,
     AUDIO_FORMAT_MP2                 = 0x15000000UL,
+    AUDIO_FORMAT_EVRCNW              = 0x16000000UL,
 #endif
     AUDIO_FORMAT_MAIN_MASK           = 0xFF000000UL,
     AUDIO_FORMAT_SUB_MASK            = 0x00FFFFFFUL,
@@ -501,6 +502,24 @@ enum {
 
 typedef uint32_t audio_devices_t;
 
+
+#ifdef STE_AUDIO
+
+// AUDIO_INPUT_CLIENT_ID_BASE provide a means to refer to client Id´s not
+// explicitly defined in the enum audio_input_clients
+#define AUDIO_INPUT_CLIENT_ID_BASE AUDIO_INPUT_CLIENT_ID1
+
+// AUDIO_INPUT_CLIENT_ID_BASE provide a means to refer to client Id?s not explicitly defined in the enum audio_input_clients
+typedef enum audio_input_clients {
+        AUDIO_INPUT_CLIENT_ID1 = 0x1,
+        AUDIO_INPUT_CLIENT_ID2 = 0x2,
+        AUDIO_INPUT_CLIENT_ID3 = 0x3,
+        AUDIO_INPUT_CLIENT_ID4 = 0x4,
+        AUDIO_INPUT_CLIENT_PLAYBACK = 0x80000000, // request client of playback type
+        AUDIO_INPUT_CLIENT_RECORD = 0x80000001   // request client of recording type
+} audio_input_clients;
+#endif
+
 /* the audio output flags serve two purposes:
  * - when an AudioTrack is created they indicate a "wish" to be connected to an
  * output stream with attributes corresponding to the specified flags
@@ -701,6 +720,7 @@ static inline bool audio_is_valid_format(audio_format_t format)
     case AUDIO_FORMAT_DTS_LBR:
     case AUDIO_FORMAT_AMR_WB_PLUS:
     case AUDIO_FORMAT_MP2:
+    case AUDIO_FORMAT_EVRCNW:
 #endif
         return true;
     default:
@@ -719,6 +739,9 @@ static inline bool audio_is_supported_compressed(audio_format_t format)
     if (format == AUDIO_FORMAT_AMR_NB ||
         format == AUDIO_FORMAT_AMR_WB ||
         format == AUDIO_FORMAT_EVRC ||
+        format == AUDIO_FORMAT_EVRCB ||
+        format == AUDIO_FORMAT_EVRCWB ||
+        format == AUDIO_FORMAT_EVRCNW ||
         format == AUDIO_FORMAT_QCELP ||
         format == AUDIO_FORMAT_AAC)
         return true;
@@ -764,6 +787,25 @@ static inline size_t audio_bytes_per_sample(audio_format_t format)
     }
     return size;
 }
+
+//This enum used for  resource management in 8x10
+#ifdef RESOURCE_MANAGER
+typedef enum {
+       USECASE_PCM_PLAYBACK = 0,
+       USECASE_PCM_RECORDING,
+       USECASE_NON_TUNNEL_DSP_PLAYBACK,
+       USECASE_TUNNEL_DSP_PLAYBACK,
+       USECASE_LPA_PLAYBACK,
+       USECASE_NON_TUNNEL_VIDEO_DSP_PLAYBACK,
+       USECASE_VIDEO_PLAYBACK,
+       USECASE_VIDEO_RECORD,
+       USECASE_VOICE_CALL,
+       USECASE_VOIP_CALL,
+       USECASE_VIDEO_TELEPHONY,
+       USECASE_FM_PLAYBACK,
+       USECASE_ULL,
+} audio_use_case_value_t;
+#endif
 
 __END_DECLS
 
