@@ -51,7 +51,8 @@ endif
 
 LOCAL_SHARED_LIBRARIES += libdl libcutils liblog libgccdemangle
 
-LOCAL_CFLAGS += -std=gnu99 -Werror -Wno-unused-parameter -fno-inline-small-functions -Wno-error=unused-parameter
+LOCAL_CFLAGS += -std=gnu99 -Werror -fno-inline-small-functions -Wno-error=unused-parameter
+
 LOCAL_MODULE := libcorkscrew
 LOCAL_MODULE_TAGS := optional
 
